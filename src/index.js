@@ -52,24 +52,9 @@ function onLoadMore(){
 
 function createGallery(arr){
     const markUp= arr.map(items=>`<div class="photo-card">
-    <img src="${items.previewURL}" alt="${items.tags}" loading="lazy" />
-    <div class="info">
-      <p class="info-item">
-        <b>Likes:${items.likes}</b>
-      </p>
-      <p class="info-item">
-        <b>Views:${items.views}</b>
-      </p>
-      <p class="info-item">
-        <b>Comments:${items.comments}</b>
-      </p>
-      <p class="info-item">
-        <b>Downloads:${items.downloads}</b>
-      </p>
-    </div>
-  </div>`
-  ).join()
-
+    <img src="${items.previewURL}" alt="${items.tags}" loading="lazy"/>
+    <div class="info"><p class="info-item"><b>Likes:${items.likes}</b></p><p class="info-item"><b>Views:${items.views}</b></p><p class="info-item"><b>Comments:${items.comments}</b></p><p class="info-item"><b>Downloads:${items.downloads}</b></p></div></div>`).join('')
+ 
   refs.galleryEl.insertAdjacentHTML('beforeend',markUp)
 }
 

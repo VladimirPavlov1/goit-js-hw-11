@@ -14,10 +14,9 @@ export default class PhotoServiceApi{
         const url=`${BASE_URL}?${KEY}&q=${this.query}&page=${this.page}&per_page=15&image_type=photo&orientation=horisontal&safesearch=true`
         
         return axios.get(url)
-        .then(response=>response)
-        .then(data=>{
+        .then(response=>{response.data.hits
             this.page+=1;
-            return data.data.hits;
+            return response.data.hits;
         })
         .catch(error=>console.error("error"))
     }
