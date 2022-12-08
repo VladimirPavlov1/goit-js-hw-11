@@ -2,39 +2,53 @@ const axios = require('axios').default;
 console.log(axios)
 
 import PhotoServiceApi from './photo-service';
+import LoadMoreBtn from './load-btn';
+
 
 const refs = {
     formEl:document.querySelector('.search-form'),
     galleryEl:document.querySelector('.gallery'),
-    loadMoreBtn:document.querySelector('.load-more')
+   
 }
+const loadMoreBtn = new LoadMoreBtn({selector:'.load-more', hidden:true});
+console.log(loadMoreBtn)
+const photoServiceApi = new PhotoServiceApi();
 
 console.log(refs)
 
 refs.formEl.addEventListener('submit', onSearch)
-refs.loadMoreBtn.addEventListener('click',onLoadMore)
+loadMoreBtn.refs.button.addEventListener('click',onLoadMore)
 
 
-const photoServiceApi = new PhotoServiceApi()
 
-function onLoadMore(){
-    photoServiceApi.fetchApi()
-}
+
 
 function onSearch(e){
     e.preventDefault();
 
     photoServiceApi.sQuery = e.currentTarget.elements.searchQuery.value;
-    
+    if(photoServiceApi.sQuery===''){
+     return  alert('Oй')
+    }
     photoServiceApi.resetPage();
-
+    loadMoreBtn.show();
+    loadMoreBtn.disabled();
     clearPhotoGallery();
 
     photoServiceApi.fetchApi()
-    .then(hits=>createGallery(hits));
+    .then(hits=>{
+      createGallery(hits);
+      loadMoreBtn.enable();
+    });
 }
 
-
+function onLoadMore(){
+  loadMoreBtn.disabled();
+  photoServiceApi.fetchApi().then(hits=>{
+    createGallery(hits);
+    loadMoreBtn.enable();
+  })
+}
 
 function createGallery(arr){
     const markUp= arr.map(items=>`<div class="photo-card">
