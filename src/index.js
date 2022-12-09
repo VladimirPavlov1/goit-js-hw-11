@@ -5,11 +5,12 @@ import PhotoServiceApi from './photo-service';
 import LoadMoreBtn from './load-btn';
 import Notiflix from 'notiflix';
 import SimpleLightbox from "simplelightbox";
+import SimpleLightbox from "simplelightbox/dist/simple-lightbox.esm";
 import "simplelightbox/dist/simple-lightbox.min.css";
 
-let gallerry = new SimpleLightbox('.gallery a')
 
-console.log(gallerry)
+
+
 
 const refs = {
     formEl:document.querySelector('.search-form'),
@@ -42,15 +43,22 @@ function onSearch(e){
     loadMoreBtn.disabled();
     clearPhotoGallery();
 
+   
+
     photoServiceApi.fetchApi()
     .then(hits=>{
-      if(hits===[]){
-          Notiflix.Notify.info('Нічого не знайдено');
+      if(hits!==[]){
+        createGallery(hits);
+       
+        loadMoreBtn.enable();  
+        let gallery= new SimpleLightbox('.gallery a')
+console.log(gallery)
+
+        return
       }
-     
-      createGallery(hits);
-      
-      loadMoreBtn.enable();
+      Notiflix.Notify.info('Нічого не знайдено');
+     loadMoreBtn.hide()
+     return
 }
 );
 }
@@ -65,7 +73,26 @@ function onLoadMore(){
 
 function createGallery(arr){
     const markUp= arr.map(items=>`<div class="photo-card">
-    <a href="${items.previewURL}"><img src="${items.largeImageURL}" alt="${items.tags}" loading="lazy"/></a><div class="info"><p class="info-item"><b>Likes:${items.likes}</b></p><p class="info-item"><b>Views:${items.views}</b></p><p class="info-item"><b>Comments:${items.comments}</b></p><p class="info-item"><b>Downloads:${items.downloads}</b></p></div></div>`).join('')
+    <div class="thumb">
+      <a href="${items.largeImageURL}">
+        <img src="${items.webformatURL}" alt="${items.tags}" title="${items.tags}" loading="lazy"/>
+      </a>
+    </div>
+    <div class="info">
+      <p class="info-item">
+        <b>Likes:${items.likes}</b>
+      </p>
+      <p class="info-item">
+        <b>Views:${items.views}</b>
+      </p>
+      <p class="info-item">
+        <b>Comments:${items.comments}</b>
+      </p>
+      <p class="info-item">
+        <b>Downloads:${items.downloads}</b>
+      </p>
+    </div>
+  </div>`).join('')
  
   refs.galleryEl.insertAdjacentHTML('beforeend',markUp)
 }
