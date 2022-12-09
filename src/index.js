@@ -5,6 +5,7 @@ import PhotoServiceApi from './photo-service';
 import LoadMoreBtn from './load-btn';
 import Notiflix from 'notiflix';
 import SimpleLightbox from "simplelightbox";
+import "simplelightbox/dist/simple-lightbox.min.css";
 
 let gallerry = new SimpleLightbox('.gallery a')
 
@@ -48,7 +49,7 @@ function onSearch(e){
       }
      
       createGallery(hits);
-      gallery.on('show.simplelightbox');
+      
       loadMoreBtn.enable();
 }
 );
